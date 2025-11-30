@@ -51,7 +51,24 @@ export const useTodo = () => {
         const fetchTodos = async () => {
             try {
                 const data = await todoApi.getTodos();
-                setTodos(data);
+
+                // Normalize different possible response shapes from the API
+                let normalized: any[] = [];
+                if (Array.isArray(data)) {
+                    normalized = data;
+                } else if (data && typeof data === 'object') {
+                    if (Array.isArray((data as any).records)) normalized = (data as any).records;
+                    else if (Array.isArray((data as any).result)) normalized = (data as any).result;
+                    else if (Array.isArray((data as any).data)) normalized = (data as any).data;
+                    else if (Array.isArray((data as any).inserted)) normalized = (data as any).inserted;
+                }
+
+                if (!Array.isArray(normalized)) {
+                    console.warn('Unexpected todos response, expected array-like shape:', data);
+                    normalized = [];
+                }
+
+                setTodos(normalized);
             } catch (error) {
                 console.error('Error fetching todos:', error);
                 throw error;
