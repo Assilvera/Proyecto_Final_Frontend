@@ -1,8 +1,12 @@
+console.log("GA ID (build):", import.meta.env.VITE_GA_MEASUREMENT_ID);
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import * as Sentry from '@sentry/react'
 import App from './App'
 import { initAnalytics, trackPageView } from './utils/analytics'
+
+console.log("GA ID (build):", import.meta.env.VITE_GA_MEASUREMENT_ID);
+
 
 // ========= SENTRY =========
 const dsn = import.meta.env.VITE_SENTRY_DSN
